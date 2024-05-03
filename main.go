@@ -99,7 +99,7 @@ func main() {
 	})
 
 	// Loop over for every chapter
-	for i := 77; i <= 79; i++ {
+	for i := 1; i <= 479; i++ {
 		fileIndex = i
 		scrapeURL := fmt.Sprintf(baseURL, i)
 		c.Visit(scrapeURL)
