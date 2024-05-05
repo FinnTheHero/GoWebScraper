@@ -17,13 +17,52 @@ var check bool
 var single int
 var multi bool
 var from = 1
-var to = 479
+var to int
 
 func init() {
 	flag.BoolVar(&help, "help", false, "Show help message")
 	flag.BoolVar(&check, "check", false, "Check if the files exist to not overwrite")
 	flag.IntVar(&single, "single", 0, "Scrape a single chapter instead of all chapters")
 	flag.BoolVar(&multi, "multi", false, "Scrape chapters from x to y")
+}
+
+func findLastChapter() {
+	pageIndex := 478
+
+	exitLoop := false
+
+	fmt.Println("Searching for the last chapter...")
+	fmt.Println("---------------------------------")
+
+	c := colly.NewCollector(colly.AllowedDomains("rln.app", "www.rln.app"))
+
+	c.OnError(func(r *colly.Response, err error) {
+		fmt.Print(r.Request.URL)
+		fmt.Println(" | ", r.StatusCode)
+		fmt.Println("Error: ", err)
+
+		if r.StatusCode != 200 {
+			fmt.Println("Last chapter: ", pageIndex-1)
+			fmt.Println("---------------------------------")
+			to = pageIndex - 1
+			exitLoop = true
+			return
+		}
+	})
+
+	for {
+		if exitLoop {
+			break
+		}
+
+		if pageIndex%50 == 0 {
+			fmt.Println(pageIndex, " chapters found")
+		}
+
+		c.Visit(fmt.Sprintf("https://rln.app/the-beginning-after-the-end-535558/chapter-%d", pageIndex))
+
+		pageIndex++
+	}
 }
 
 func main() {
@@ -34,6 +73,8 @@ func main() {
 		flag.PrintDefaults()
 		return
 	}
+
+	findLastChapter()
 
 	// Check if the arguments are provided
 	args := flag.Args()
@@ -84,6 +125,13 @@ func main() {
 		}
 	}
 
+	if single != 0 {
+		if single < from || single > to {
+			fmt.Println("The chapter number must be between ", from, " and ", to)
+			return
+		}
+	}
+
 	c := colly.NewCollector(colly.AllowedDomains("rln.app", "www.rln.app"))
 
 	baseURL := "https://rln.app/the-beginning-after-the-end-535558/chapter-%d"
@@ -99,7 +147,11 @@ func main() {
 	os.MkdirAll(txtSubfolder, os.ModePerm)
 
 	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
+		fmt.Print(r.URL)
+	})
+
+	c.OnResponse(func(r *colly.Response) {
+		fmt.Println(" | ", r.StatusCode)
 	})
 
 	c.OnError(func(r *colly.Response, err error) {
