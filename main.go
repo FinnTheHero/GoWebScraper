@@ -55,10 +55,6 @@ func findLastChapter() {
 			break
 		}
 
-		if pageIndex%50 == 0 {
-			fmt.Println(pageIndex, " chapters found")
-		}
-
 		c.Visit(fmt.Sprintf("https://rln.app/the-beginning-after-the-end-535558/chapter-%d", pageIndex))
 
 		pageIndex++
