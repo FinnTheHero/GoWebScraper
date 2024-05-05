@@ -27,7 +27,7 @@ func init() {
 }
 
 func findLastChapter() {
-	pageIndex := 478
+	pageIndex := 479
 
 	exitLoop := false
 
@@ -123,7 +123,8 @@ func main() {
 
 	if single != 0 {
 		if single < from || single > to {
-			fmt.Println("The chapter number must be between ", from, " and ", to)
+			fmt.Println("The chapter must be between ", from, " and ", to)
+			fmt.Println("You searched for: ", single)
 			return
 		}
 	}
