@@ -1,7 +1,7 @@
 # WebScraper for TBATE light novel written in Go
 ## About
 * Project uses colly framework
-
+* Single threded only, no multithreading as of now
 ## Extra
 * Scraping every chapter takes somewhere between 2 and 3 minutes
 * You can further optimize by updating variable `findLastChapter()` function uses to start search from. This will reduce wait time before scrape starts
@@ -12,17 +12,17 @@
     ```
 2. **Multi Chapter**: Scrape multiple chapters at once 
     * Scrape every chapter
-    ```bash
-    go run main.go -multi
-    ```
+        ```bash
+        go run main.go -multi
+        ```
     * Scrape `<From>` till the end
-    ```bash
-    go run main.go -multi <From>
-    ```
+        ```bash
+        go run main.go -multi <From>
+        ```
     * Scrape `<From>` `<to>`
-    ```bash
-    go run main.go -multi <From> <To>
-    ```
+        ```bash
+        go run main.go -multi <From> <To>
+        ```
 3. **Check** if files already exist
     ```bash
     go run main.go -multi -check
