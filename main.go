@@ -158,7 +158,7 @@ func main() {
 
 	// Scrape the chapter text on each page
 	c.OnHTML("div#chapterText", func(e *colly.HTMLElement) {
-		unwantedStrings := []string{"SPONSORED CONTENT", "Sponsored Content", "_"}
+		unwantedStrings := []string{"SPONSORED CONTENT", "Sponsored Content", "_", "                            "}
 		// Add frontmatter first then rest of the text
 		finalText := frontmatter(strconv.Itoa(fileIndex))
 
@@ -168,16 +168,27 @@ func main() {
 				finalText += "\n"
 			} else if fileIndex > 78 && s.Is("p") {
 				text := s.Text()
+				if strings.Contains(text, "Chapter") {
+					return
+				}
 				for _, unwantedString := range unwantedStrings {
 					text = strings.Replace(text, unwantedString, "", -1)
 				}
-				finalText += text + "\n"
+				if strings.TrimSpace(text) == "" {
+					finalText += "\n"
+				} else {
+					finalText += text + "\n"
+				}
 			} else {
 				text := s.Text()
 				for _, unwantedString := range unwantedStrings {
 					text = strings.Replace(text, unwantedString, "", -1)
 				}
-				finalText += text
+				if strings.TrimSpace(text) == "" {
+					finalText += "\n"
+				} else {
+					finalText += text
+				}
 			}
 		})
 
