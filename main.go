@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
@@ -158,7 +159,8 @@ func main() {
 	// Scrape the chapter text on each page
 	c.OnHTML("div#chapterText", func(e *colly.HTMLElement) {
 		unwantedStrings := []string{"SPONSORED CONTENT", "Sponsored Content", "_"}
-		finalText := ""
+		// Add frontmatter first then rest of the text
+		finalText := frontmatter(strconv.Itoa(fileIndex))
 
 		// Replace unwanted strings and add new lines for <br> tags
 		e.DOM.Contents().Each(func(i int, s *goquery.Selection) {
@@ -226,4 +228,14 @@ func main() {
 			c.Visit(scrapeURL)
 		}
 	}
+}
+
+/* Add frontmatter to the markdown files */
+func frontmatter(chapterIndex string) string {
+
+	currentDate := time.Now().Format("Jan 2 2006")
+
+	frontmatter := "---\ntitle: 'Chapter " + chapterIndex + "'\ndescription: 'Chapter " + chapterIndex + " of TBATE web-novel'\npubDate: '" + currentDate + "'\nauthor: FinnTheHero\n---"
+
+	return frontmatter
 }
