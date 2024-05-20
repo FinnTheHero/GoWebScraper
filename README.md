@@ -19,7 +19,7 @@
         ```bash
         go run main.go -multi <From>
         ```
-    * Scrape `<From>` `<to>`
+    * Scrape `<From>` to `<to>`
         ```bash
         go run main.go -multi <From> <To>
         ```
