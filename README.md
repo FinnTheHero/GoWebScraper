@@ -7,9 +7,11 @@
 * You can further optimize by updating variable `findLastChapter()` function uses to start search from. This will reduce wait time before scrape starts
 # Usage
 * **Move into `src` directory, inside the project, and run from there**
+* **Only use numbers as arguments**
+
 1. **Single Chapter**: Scrape specified chapter
     ```bash
-    go run . -single <Chapter To Scrape>
+    go run . -single <Chapter>
     ```
 2. **Multi Chapter**: Scrape multiple chapters at once 
     * Scrape every chapter
