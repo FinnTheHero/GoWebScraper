@@ -6,6 +6,7 @@
 * Scraping every chapter takes somewhere between 2 and 3 minutes
 * You can further optimize by updating variable `findLastChapter()` function uses to start search from. This will reduce wait time before scrape starts
 # Usage
+* **Move into `src` directory, inside the project, and run from there**
 1. **Single Chapter**: Scrape specified chapter
     ```bash
     go run . -single <Chapter To Scrape>
