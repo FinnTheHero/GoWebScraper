@@ -1,4 +1,4 @@
-# WebScraper for TBATE light novel written in Go
+# WebScraper for TBATE light novel written in GoLang
 ## About
 * Project uses colly framework
 * Single threded only, no multithreading as of now
