@@ -1,3 +1,4 @@
 # exclude fetched files to not clutter the repo
 md/*
 txt/*
+epub/*
