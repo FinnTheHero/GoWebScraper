@@ -17,12 +17,14 @@ var single int
 var multi bool
 var from = 1
 var to int
+var epubParam bool
 
 func init() {
 	flag.BoolVar(&help, "help", false, "Show help message")
 	flag.BoolVar(&check, "check", false, "Check if the files exist to not overwrite")
 	flag.IntVar(&single, "single", 0, "Scrape a single chapter instead of all chapters")
 	flag.BoolVar(&multi, "multi", false, "Scrape chapters from x to y")
+	flag.BoolVar(&epubParam, "epub", false, "Create an EPUB file")
 }
 
 func main() {
@@ -74,12 +76,12 @@ func main() {
 
 	// Scrape the chapter text on each page
 	c.OnHTML("div#chapterText", func(e *colly.HTMLElement) {
-		unwantedStrings := []string{"SPONSORED CONTENT", "Sponsored Content", "_", "                            "}
+		unwantedStrings := []string{"SPONSORED CONTENT", "Sponsored Content", "_", "                            ", "	"}
 		// Add frontmatter first then rest of the text
-		finalText := ""
+		parsedText := ""
 
 		e.DOM.Contents().Each(func(i int, s *goquery.Selection) {
-			ParseChapter(s, &finalText, fileIndex, unwantedStrings)
+			ParseChapter(s, &parsedText, fileIndex, unwantedStrings)
 		})
 
 		// Create a file name with index
@@ -109,11 +111,11 @@ func main() {
 			}
 
 			if i == 0 {
-				file.WriteString(finalText)
+				file.WriteString(parsedText)
 				file.Close()
 				fmt.Println("File saved:", filename)
 			} else if i == 1 {
-				file.WriteString(Frontmatter(strconv.Itoa(fileIndex)) + finalText)
+				file.WriteString(Frontmatter(strconv.Itoa(fileIndex)) + parsedText)
 				file.Close()
 				fmt.Println("File saved:", filename)
 			}
@@ -135,5 +137,12 @@ func main() {
 			scrapeURL := fmt.Sprintf(baseURL, i)
 			c.Visit(scrapeURL)
 		}
+	}
+
+	fmt.Println("---------------------------------")
+
+	if epubParam {
+		// Create an EPUB file
+		CreateEPUB()
 	}
 }
