@@ -31,7 +31,8 @@
     ```bash
     go run . <Sinlge or Multi> -check
     ```
-    > Check can be used on both `Single` and `Multi` mode
+    > Check can be used on both `Single` and `Multi` mode.
+    
     > As of now, you need some other mode first to check downloaded files
 
 4. **EPUB**, compile all the downloaded txt files into epub file
