@@ -27,7 +27,15 @@
         go run . -multi <From> <To>
         ```
 3. **Check** if files already exist
+    **This will only check file names, not the actual content inside the files**
     ```bash
     go run . <Sinlge or Multi> -check
     ```
     > Check can be used on both `Single` and `Multi` mode
+    > As of now, you need some other mode first to check downloaded files
+
+4. **EPUB**, compile all the downloaded txt files into epub file
+    ```bash
+    go run . <Sinlge or Multi> -epub true
+    ```
+    > As of now, you need to run some other mode first to compile epub
